@@ -1,0 +1,98 @@
+<section class="carousel-section">
+  <div class="carousel">
+    <button class="carousel-btn prev" (click)="prevSlide()">&#8249;</button>
+    <div class="carousel-wrapper">
+      <div class="carousel-slides">
+        <a
+          *ngFor="let product of popularProducts; let i = index"
+          [routerLink]="getCategoryRoute(product.category.id, product._id)"
+          class="carousel-slide"
+          [ngStyle]="getSlideStyle(i)"
+        >
+          <img [src]="product.thumbnail" [alt]="product.title" />
+          <div class="slide-content">
+            <h3>{{ capitalizeTitle(product.title) }}</h3>
+            <p class="price">{{ product.price.current }} {{ product.price.currency }}</p>
+            <div class="rating">
+              <span class="stars">{{ product.rating | number : '1.1-1' }}</span>
+              <span class="star-icon">&#9733;</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <button class="carousel-btn next" (click)="nextSlide()">&#8250;</button>
+    <div class="carousel-dots">
+      <span
+        *ngFor="let product of popularProducts; let i = index"
+        class="dot"
+        [ngClass]="{ active: i === currentSlide }"
+        (click)="goToSlide(i)"
+      ></span>
+    </div>
+  </div>
+</section>
+
+<div class="home-container">
+  <section class="categories-section" *ngFor="let categoryData of categoriesWithProducts">
+    <h2 class="section-title">{{ capitalizeFirst(categoryData.category.name) }}</h2>
+    <div class="products-grid">
+      <a
+        *ngFor="let product of categoryData.products"
+        [routerLink]="getCategoryRoute(product.category.id, product._id)"
+        class="product-card"
+      >
+        <div class="card-icons">
+          <span *ngIf="product.price.discountPercentage > 0" class="badge-discount">Discounted</span>
+        </div>
+        <img [src]="product.thumbnail" [alt]="product.title" class="card-img-top" />
+        <div class="card-body">
+          <h5 class="card-title">{{ capitalizeTitle(product.title) }}</h5>
+          <div class="price-container">
+            <h5 class="card-price">{{ product.price.current }} {{ product.price.currency }}</h5>
+            <h5
+              *ngIf="product.price.discountPercentage > 0"
+              class="before-price"
+            >
+              {{ product.price.beforeDiscount }} {{ product.price.currency }}
+            </h5>
+          </div>
+          <div class="rating">
+            <span>{{ product.rating | number : '1.1-1' }}</span>
+            <span class="star">&#9733;</span>
+          </div>
+          <button class="card-button" (click)="addToCart($event, product)" [disabled]="product.stock === 0">
+            {{ product.stock === 0 ? 'Out of Stock' : 'Add to Cart' }}
+          </button>
+        </div>
+      </a>
+    </div>
+    <button [routerLink]="getCategoryListRoute(categoryData.category.id)" class="see-more-btn">
+      See More
+    </button>
+  </section>
+
+  <section class="social-media-section">
+    <h2 class="social-title">Follow Us</h2>
+    <div class="social-icons">
+      <a href="https://facebook.com" target="_blank" class="social-link facebook">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://twitter.com" target="_blank" class="social-link twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="social-link instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="social-link linkedin">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </div>
+  </section>
+</div>
+
+<button class="scroll-btn" (click)="handleScroll()" [class.scroll-up]="!isScrollingDown">
+  <span class="arrow-icon">
+    <i [class]="isScrollingDown ? 'fa fa-chevron-down' : 'fa fa-chevron-up'"></i>
+  </span>
+</button>

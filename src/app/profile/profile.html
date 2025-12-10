@@ -1,0 +1,291 @@
+<section>
+  <div class="header">
+    <button class="back" (click)="back()">← Back</button>
+    <h1>Profile</h1>
+  </div>
+
+  <div class="profile-container" *ngIf="user">
+    <div class="avatar-section">
+      <img [src]="editMode ? editData.avatar : user.avatar" alt="Avatar" class="avatar" />
+    </div>
+
+    <div class="personal-info">
+      <h2>Personal Information</h2>
+
+      <div class="info-grid" *ngIf="!editMode">
+        <div class="info-item">
+          <span class="label">First Name:</span>
+          <span class="value">{{ capitalizeTitle(user.firstName) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Last Name:</span>
+          <span class="value">{{ capitalizeTitle(user.lastName) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Email:</span>
+          <span class="value">{{ user.email }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Age:</span>
+          <span class="value">{{ user.age }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Address:</span>
+          <span class="value">{{ user.address }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Phone:</span>
+          <span class="value">{{ user.phone }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Zipcode:</span>
+          <span class="value">{{ user.zipcode }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Gender:</span>
+          <span class="value">{{ capitalizeTitle(user.gender) }}</span>
+        </div>
+      </div>
+
+      <form
+        *ngIf="editMode"
+        class="edit-form"
+        (ngSubmit)="saveChanges(editForm)"
+        #editForm="ngForm"
+      >
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input
+            type="text"
+            name="firstName"
+            [(ngModel)]="editData.firstName"
+            required
+            minlength="2"
+            #firstName="ngModel"
+            [ngClass]="{
+              success: firstName.touched && firstName.valid,
+              error: firstName.touched && firstName.invalid
+            }"
+            placeholder="Enter your first name"
+          />
+          <span class="error-message" *ngIf="firstName.touched && firstName.errors?.['required']">First name is required</span>
+          <span class="error-message" *ngIf="firstName.touched && firstName.errors?.['minlength']">First name must be at least 2 characters</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            [(ngModel)]="editData.lastName"
+            required
+            minlength="2"
+            #lastName="ngModel"
+            [ngClass]="{
+              success: lastName.touched && lastName.valid,
+              error: lastName.touched && lastName.invalid
+            }"
+            placeholder="Enter your last name"
+          />
+          <span class="error-message" *ngIf="lastName.touched && lastName.errors?.['required']">Last name is required</span>
+          <span class="error-message" *ngIf="lastName.touched && lastName.errors?.['minlength']">Last name must be at least 2 characters</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <input
+            type="number"
+            name="age"
+            [(ngModel)]="editData.age"
+            required
+            min="18"
+            #age="ngModel"
+            [ngClass]="{
+              success: age.touched && age.valid,
+              error: age.touched && age.invalid
+            }"
+            placeholder="18"
+          />
+          <span class="error-message" *ngIf="age.touched && age.errors?.['required']">Age is required</span>
+          <span class="error-message" *ngIf="age.touched && age.errors?.['min']">You must be at least 18 years old</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Address</label>
+          <input
+            type="text"
+            name="address"
+            [(ngModel)]="editData.address"
+            required
+            minlength="5"
+            #address="ngModel"
+            [ngClass]="{
+              success: address.touched && address.valid,
+              error: address.touched && address.invalid
+            }"
+            placeholder=""
+          />
+          <span class="error-message" *ngIf="address.touched && address.errors?.['required']">Address is required</span>
+          <span class="error-message" *ngIf="address.touched && address.errors?.['minlength']">Address must be at least 5 characters</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input
+            type="tel"
+            name="phone"
+            [(ngModel)]="editData.phone"
+            (input)="onPhoneInput($event)"
+            required
+            pattern="[+][0-9]{10,12}"
+            #phone="ngModel"
+            [ngClass]="{
+              success: phone.touched && phone.valid,
+              error: phone.touched && phone.invalid
+            }"
+            placeholder=""
+          />
+          <span class="help-text">Format: +[country code][number] (12 digits total)</span>
+          <span class="error-message" *ngIf="phone.touched && phone.errors?.['required']">Phone is required</span>
+          <span class="error-message" *ngIf="phone.touched && phone.errors?.['pattern']">Enter a valid phone number (e.g., +995599123456)</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Zipcode</label>
+          <input
+            type="text"
+            name="zipcode"
+            [(ngModel)]="editData.zipcode"
+             (input)="onZipcode($event)"
+            required
+            pattern="[0-9]{4,10}"
+            #zipcode="ngModel"
+            [ngClass]="{
+              success: zipcode.touched && zipcode.valid,
+              error: zipcode.touched && zipcode.invalid
+            }"
+            placeholder=""
+          />
+          <span class="error-message" *ngIf="zipcode.touched && zipcode.errors?.['required']">Zipcode is required</span>
+          <span class="error-message" *ngIf="zipcode.touched && zipcode.errors?.['pattern']">Zipcode must be 4-10 digits</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Avatar URL</label>
+          <input
+            type="url"
+            name="avatar"
+            [(ngModel)]="editData.avatar"
+            required
+            pattern="https?://.+"
+            #avatar="ngModel"
+            [ngClass]="{
+              success: avatar.touched && avatar.valid,
+              error: avatar.touched && avatar.invalid
+            }"
+            placeholder=""
+          />
+          <span class="error-message" *ngIf="avatar.touched && avatar.errors?.['required']">Avatar URL is required</span>
+          <span class="error-message" *ngIf="avatar.touched && avatar.errors?.['pattern']">Enter a valid URL (must start with http:// or https://)</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="gender" value="MALE" [(ngModel)]="editData.gender" />
+              Male
+            </label>
+            <label>
+              <input type="radio" name="gender" value="FEMALE" [(ngModel)]="editData.gender" />
+              Female
+            </label>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="save-btn" [disabled]="editForm.invalid">Save Changes</button>
+          <button type="button" class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </form>
+
+      <button *ngIf="!editMode" (click)="toggleEditMode()" class="action-btn">
+        <i class="fa fa-edit"></i> Edit Profile
+      </button>
+    </div>
+
+    <div class="change-password">
+      <h2>Change Password</h2>
+      <form *ngIf="!showPasswordForm" class="password-trigger">
+        <button type="button" (click)="showPasswordForm = true" class="action-btn">
+          <i class="fa fa-lock"></i> Change Password
+        </button>
+      </form>
+
+      <form
+        *ngIf="showPasswordForm"
+        class="password-form"
+        (ngSubmit)="changePassword(passwordForm)"
+        #passwordForm="ngForm"
+      >
+        <div class="form-group">
+          <label class="form-label">Old Password</label>
+          <div class="password-wrapper">
+            <input
+              [type]="showOldPassword ? 'text' : 'password'"
+              name="oldPassword"
+              [(ngModel)]="passwordData.oldPassword"
+              required
+              minlength="8"
+              #oldPassword="ngModel"
+              [ngClass]="{
+                success: oldPassword.touched && oldPassword.valid,
+                error: oldPassword.touched && oldPassword.invalid
+              }"
+              placeholder="Min 8 characters"
+            />
+            <button type="button" class="toggle-password" (click)="showOldPassword = !showOldPassword">
+              <i [class]="showOldPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+            </button>
+          </div>
+          <span class="error-message" *ngIf="oldPassword.touched && oldPassword.errors?.['required']">Old password is required</span>
+          <span class="error-message" *ngIf="oldPassword.touched && oldPassword.errors?.['minlength']">Password must be at least 8 characters</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">New Password</label>
+          <div class="password-wrapper">
+            <input
+              [type]="showNewPassword ? 'text' : 'password'"
+              name="newPassword"
+              [(ngModel)]="passwordData.newPassword"
+              required
+              minlength="8"
+              #newPassword="ngModel"
+              [ngClass]="{
+                success: newPassword.touched && newPassword.valid,
+                error: newPassword.touched && newPassword.invalid
+              }"
+              placeholder="Min 8 characters"
+            />
+            <button type="button" class="toggle-password" (click)="showNewPassword = !showNewPassword">
+              <i [class]="showNewPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+            </button>
+          </div>
+          <span class="error-message" *ngIf="newPassword.touched && newPassword.errors?.['required']">New password is required</span>
+          <span class="error-message" *ngIf="newPassword.touched && newPassword.errors?.['minlength']">Password must be at least 8 characters</span>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="save-btn" [disabled]="passwordForm.invalid">
+            Update Password
+          </button>
+          <button type="button" class="cancel-btn" (click)="cancelPasswordChange()">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="danger-zone">
+      <h2>Danger Zone</h2>
+      <button (click)="deleteAccount()" class="action-btn danger-btn">
+        <i class="fa fa-trash"></i> Delete Account
+      </button>
+    </div>
+  </div>
+
+  <button class="scroll-btn" (click)="handleScroll()" [class.scroll-up]="!isScrollingDown">
+    <span class="arrow-icon">
+      <i [class]="isScrollingDown ? 'fa fa-chevron-down' : 'fa fa-chevron-up'"></i>
+    </span>
+  </button>
+</section>

@@ -1,0 +1,145 @@
+<section>
+  <div class="header">
+    <button class="back" (click)="back()">← Back</button>
+    <h1>My Reviews</h1>
+  </div>
+
+  <div class="controls">
+    <div class="control-left">
+      <div class="filter-group">
+        <select [(ngModel)]="selectedCategory" (change)="filterReviews()" class="category-filter">
+          <option value="all">All Categories</option>
+          <option value="laptops">Laptops</option>
+          <option value="phones">Phones</option>
+        </select>
+      </div>
+      <button class="add-review-btn" (click)="openAddReviewModal()">
+        <i class="fa fa-plus"></i> Add Review
+      </button>
+    </div>
+    <button
+      *ngIf="filteredReviews && filteredReviews.length > 0"
+      class="delete-all-btn"
+      (click)="deleteAllReviews()"
+    >
+      <i class="fa fa-trash"></i> Delete All Reviews
+    </button>
+  </div>
+
+  <div class="reviews-container" *ngIf="filteredReviews && filteredReviews.length > 0">
+    <div *ngFor="let review of filteredReviews" class="review-card">
+      <div class="review-header">
+        <img [src]="review.productImage" [alt]="review.productTitle" class="product-thumb" />
+        <div class="product-info">
+          <h3 (click)="viewProduct(review)" class="product-title">{{ review.productTitle }}</h3>
+          <div class="stars">
+            <span
+              *ngFor="let star of getStarArray(review.rating)"
+              class="star"
+              [class.filled]="star === 1"
+            >
+              &#9733;
+            </span>
+          </div>
+          <span class="date">{{ review.createdAt | date }}</span>
+        </div>
+      </div>
+
+      <div class="review-content" *ngIf="editingReview?._id !== review._id">
+        <p class="review-text">{{ review.review }}</p>
+        <div class="review-actions">
+          <button class="edit-btn" (click)="startEdit(review)">
+            <i class="fa fa-edit"></i> Edit
+          </button>
+          <button class="delete-btn" (click)="deleteReview(review)">
+            <i class="fa fa-trash"></i> Delete
+          </button>
+        </div>
+      </div>
+
+      <div class="review-edit" *ngIf="editingReview?._id === review._id">
+        <div class="edit-rating">
+          <label>Rating:</label>
+          <div class="stars">
+            <span
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              class="star"
+              [class.filled]="star <= editRating"
+              (click)="editRating = star"
+            >
+              &#9733;
+            </span>
+          </div>
+        </div>
+        <textarea
+          [(ngModel)]="editReviewText"
+          class="edit-textarea"
+          rows="4"
+          placeholder="Write your review..."
+        ></textarea>
+        <div class="edit-actions">
+          <button class="save-btn" (click)="saveEdit()"><i class="fa fa-check"></i> Save</button>
+          <button class="cancel-btn" (click)="cancelEdit()">
+            <i class="fa fa-times"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-reviews" *ngIf="!filteredReviews || filteredReviews.length === 0">
+    <i class="fa fa-comment-slash"></i>
+    <p>You haven't written any reviews yet</p>
+    <button routerLink="/" class="shop-btn">Start Shopping</button>
+  </div>
+</section>
+
+<div class="modal" *ngIf="showAddReviewModal" (click)="closeAddReviewModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Add Review</h2>
+    <div class="add-review-form">
+      <div class="form-group">
+        <label>Select Product (from your orders)</label>
+        <select [(ngModel)]="selectedProductId" (change)="onProductSelect()" class="product-select">
+          <option value="">Choose a product...</option>
+          <option *ngFor="let product of purchasedProducts" [value]="product._id">
+            {{ product.title }}
+          </option>
+        </select>
+      </div>
+      <div *ngIf="selectedProductId" class="review-form">
+        <div class="form-group">
+          <label>User Name</label>
+          <input type="text" [(ngModel)]="userName" readonly class="readonly-input" />
+        </div>
+        <div class="form-group">
+          <label>Product Rating</label>
+          <div class="star-rating">
+            <span
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              class="star"
+              [class.filled]="star <= newRating"
+              (click)="newRating = star"
+            >
+              &#9733;
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Comment</label>
+          <textarea [(ngModel)]="newComment" rows="4" placeholder="Write your review..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" (click)="submitNewReview()">Send</button>
+          <button class="btn btn-secondary" (click)="closeAddReviewModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="scroll-btn" (click)="handleScroll()" [class.scroll-up]="!isScrollingDown">
+  <span class="arrow-icon">
+    <i [class]="isScrollingDown ? 'fa fa-chevron-down' : 'fa fa-chevron-up'"></i>
+  </span>
+</button>

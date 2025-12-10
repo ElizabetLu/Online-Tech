@@ -1,0 +1,127 @@
+<section>
+  <div class="header-with-title">
+    <button class="back" (click)="back()">← Back</button>
+    <h1>Search Results for "{{ searchQuery }}"</h1>
+  </div>
+
+  <div class="controls-section">
+    <div class="controls-left">
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (input)="filter()"
+        placeholder="Search by name..."
+        class="control-input search-input"
+      />
+
+      <select [(ngModel)]="selectedBrand" (change)="filter()" class="control-select">
+        <option value="" class="values">All Brands</option>
+        <option *ngFor="let brand of brands" [value]="brand" class="values">
+          {{ capitalizeBrand(brand) }}
+        </option>
+      </select>
+
+      <div class="price-range-container">
+        <label class="price-label">Min: {{ minPrice }}</label>
+        <input
+          type="range"
+          [(ngModel)]="minPrice"
+          (input)="filter()"
+          min="0"
+          max="1000"
+          step="10"
+          class="price-range"
+        />
+      </div>
+
+      <div class="price-range-container">
+        <label class="price-label">Max: {{ maxPrice }}</label>
+        <input
+          type="range"
+          [(ngModel)]="maxPrice"
+          (input)="filter()"
+          min="0"
+          max="1000"
+          step="10"
+          class="price-range"
+        />
+      </div>
+
+      <select [(ngModel)]="selectedRating" (change)="filter()" class="control-select">
+        <option value="" class="values">All Ratings</option>
+        <option value="5" class="values">5 Stars</option>
+        <option value="4" class="values">4 Stars</option>
+        <option value="3" class="values">3 Stars</option>
+        <option value="2" class="values">2 Stars</option>
+        <option value="1" class="values">1 Stars</option>
+      </select>
+
+      <select [(ngModel)]="sortOrder" (change)="filter()" class="control-select">
+        <option value="" class="values">Sort by Price</option>
+        <option value="asc" class="values">Price: Low to High</option>
+        <option value="desc" class="values">Price: High to Low</option>
+      </select>
+
+      <select [(ngModel)]="sortRating" (change)="filter()" class="control-select">
+        <option value="" class="values">Sort by Rating</option>
+        <option value="asc" class="values">Rating: Low to High</option>
+        <option value="desc" class="values">Rating: High to Low</option>
+      </select>
+
+      <button (click)="reset()" class="control-button">Reset</button>
+    </div>
+  </div>
+
+  <div class="cards-container" *ngIf="filteredProducts.length > 0">
+    <div
+      *ngFor="let product of filteredProducts"
+      [routerLink]="getCategoryRoute(product.category.id, product._id)"
+      class="card"
+    >
+      <div class="card-icons">
+        <span *ngIf="product.price.discountPercentage > 0" class="badge-discount">Discounted</span>
+      </div>
+      <img [src]="product.thumbnail" class="card-img-top" [alt]="product.title" />
+      <div class="card-body">
+        <h5 class="card-title">{{ capitalizeTitle(product.title) }}</h5>
+        <div class="price-container">
+          <h5 class="card-price">{{ product.price.current }} {{ product.price.currency }}</h5>
+          <h5 *ngIf="product.price.discountPercentage > 0" class="before-price">
+            {{ product.price.beforeDiscount }} {{ product.price.currency }}
+          </h5>
+        </div>
+        <div class="rating">
+          <span>{{ product.rating | number : '1.1-1' }}</span>
+          <span class="star">&#9733;</span>
+        </div>
+
+        <button
+          class="card-button out-of-stock"
+          *ngIf="isOutOfStock(product); else addButton"
+          disabled
+        >
+          Out of Stock
+        </button>
+        <ng-template #addButton>
+          <button
+            class="card-button"
+            (click)="addToCart($event, product)"
+            [disabled]="isAddingToCart"
+          >
+            Add to Cart
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-products" *ngIf="filteredProducts.length === 0">
+    <p>No products found for "{{ searchQuery }}"</p>
+  </div>
+
+  <button class="scroll-btn" (click)="handleScroll()" [class.scroll-up]="!isScrollingDown">
+    <span class="arrow-icon">
+      <i [class]="isScrollingDown ? 'fa fa-chevron-down' : 'fa fa-chevron-up'"></i>
+    </span>
+  </button>
+</section>

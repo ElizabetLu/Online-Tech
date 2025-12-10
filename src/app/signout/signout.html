@@ -1,0 +1,36 @@
+<section>
+  <div class="header">
+    <button class="back" (click)="back()">← Back</button>
+    <h1>Sign Out</h1>
+  </div>
+
+  <div class="signout-container">
+    <div class="signout-card">
+      <div class="icon-container">
+        <i class="fa fa-sign-out-alt"></i>
+      </div>
+
+      <h2>Are you sure you want to sign out?</h2>
+      <p>You will need to sign in again to access your account.</p>
+
+      <div class="user-info" *ngIf="user">
+        <img [src]="user.avatar || 'https://via.placeholder.com/60'" [alt]="user.firstName" />
+        <div>
+          <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+          <p>{{ user.email }}</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-signout" (click)="signOut()">
+          <i class="fa fa-sign-out-alt"></i>
+          Sign Out
+        </button>
+        <button class="btn-cancel" (click)="cancel()">
+          <i class="fa fa-times"></i>
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

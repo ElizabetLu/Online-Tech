@@ -1,0 +1,193 @@
+<section class="product-detail">
+  <div class="header">
+    <button class="back" (click)="back()">← Back</button>
+  </div>
+
+  <div class="product-container" *ngIf="product">
+    <div class="product-left">
+      <div class="product-main-image">
+        <img [src]="selectedImage" class="main-image" [alt]="product.title" />
+      </div>
+      <div class="thumbnail-images">
+        <img
+          [src]="product.thumbnail"
+          [alt]="product.title"
+          (click)="selectImage(product.thumbnail)"
+          [ngClass]="{ active: selectedImage === product.thumbnail }"
+        />
+        <img
+          *ngFor="let image of product.images"
+          [src]="image"
+          [alt]="product.title"
+          (click)="selectImage(image)"
+          [ngClass]="{ active: selectedImage === image }"
+        />
+      </div>
+    </div>
+
+    <div class="product-right">
+      <h1 class="product-title">{{ capitalizeTitle(product.title) }}</h1>
+      <p class="description">{{ capitalizeTitle(product.description) }}</p>
+
+      <div class="product-specs">
+        <div class="spec-row">
+          <span class="spec-label">Stock:</span>
+          <span class="spec-value" [ngClass]="{ 'out-of-stock': isOutOfStock }">
+            {{ capitalizeTitle(!isOutOfStock ? product.stock + ' available' : 'Out of stock') }}
+          </span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Rating:</span>
+          <span class="spec-value">{{ product.rating | number : '1.1-1' }} &#9733;</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Brand:</span>
+          <span class="spec-value">{{ capitalizeTitle(product.brand) }}</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Warranty:</span>
+          <span class="spec-value">{{ product.warranty }} Month</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Issue Date:</span>
+          <span class="spec-value">{{ product.issueDate | date }}</span>
+        </div>
+      </div>
+
+      <div class="product-price">
+        <span class="price">{{ product.price.current }} {{ product.price.currency }}</span>
+        <span *ngIf="product.price.discountPercentage > 0" class="before-price">
+          {{ product.price.beforeDiscount }} {{ product.price.currency }}
+        </span>
+      </div>
+
+      <div class="action-buttons">
+        <button class="buy-button" (click)="addToCart()" [disabled]="isOutOfStock || isAddingToCart">
+          {{ isOutOfStock ? 'Out of Stock' : 'Add to Cart' }}
+        </button>
+        <button class="action-btn" (click)="openRatingModal()">Rate Product</button>
+        <button class="action-btn qr-btn" (click)="openQRModal()">
+          <i class="fa-solid fa-qrcode"></i> Generate QR
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs" *ngIf="product">
+    <div class="tab-headers">
+      <button [ngClass]="{ active: selectedTab === 'details' }" (click)="selectTab('details')">
+        Details
+      </button>
+      <button [ngClass]="{ active: selectedTab === 'reviews' }" (click)="selectTab('reviews')">
+        Reviews ({{ productReviews.length }})
+      </button>
+    </div>
+
+    <div class="tab-content">
+      <div *ngIf="selectedTab === 'details'" class="tab-panel">
+        <h3>Product Details</h3>
+        <p>{{ capitalizeTitle(product.description) }}</p>
+        <ul>
+          <li>Brand: {{ capitalizeTitle(product.brand) }}</li>
+          <li>Category: {{ capitalizeTitle(product.category.name) }}</li>
+          <li>Warranty: {{ product.warranty }} Month</li>
+          <li>Quantity: {{ product.stock }} Left</li>
+        </ul>
+      </div>
+
+      <div *ngIf="selectedTab === 'reviews'" class="tab-panel">
+        <h3>Customer Reviews</h3>
+        <div *ngIf="productReviews.length === 0" class="no-reviews">
+          <p>No reviews yet. Be the first to rate this product!</p>
+        </div>
+        <div *ngIf="productReviews.length > 0" class="reviews-list">
+          <div *ngFor="let review of productReviews" class="review-item">
+            <div class="review-header-item">
+              <div class="reviewer-info">
+                <span class="reviewer-name">{{ review.userName }}</span>
+                <div class="stars">
+                  <span *ngFor="let star of getStarArray(review.rating)" class="star" [class.filled]="star === 1">
+                    &#9733;
+                  </span>
+                </div>
+              </div>
+              <span class="review-date">{{ review.createdAt | date }}</span>
+            </div>
+            <p class="review-text">{{ review.review }}</p>
+            <div *ngIf="isMyReview(review)" class="review-actions">
+              <button class="edit-review-btn" (click)="editReview(review)">
+                <i class="fa fa-edit"></i> Edit
+              </button>
+              <button class="delete-review-btn" (click)="deleteReview(review)">
+                <i class="fa fa-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal" *ngIf="showRatingModal" (click)="closeRatingModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Rate Product</h2>
+    <div class="rating-form">
+      <div class="form-group">
+        <label>User Name</label>
+        <input type="text" [(ngModel)]="userName" readonly class="readonly-input" />
+      </div>
+      <div class="form-group">
+        <label>Product Rating</label>
+        <div class="star-rating">
+          <span
+            *ngFor="let star of [1, 2, 3, 4, 5]"
+            class="star"
+            [ngClass]="getStarClass(star)"
+            (click)="setRating(star)"
+            (mouseenter)="setHoveredStar(star)"
+            (mouseleave)="setHoveredStar(0)"
+          >
+            &#9733;
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Comment</label>
+        <textarea [(ngModel)]="comment" rows="4" placeholder="Write your review..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" (click)="submitRating()">Send</button>
+      <button class="btn btn-secondary" (click)="closeRatingModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" *ngIf="showQROptionsModal" (click)="closeQROptionsModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Generate QR Code</h2>
+    <div class="qr-options">
+      <button class="qr-option-btn" (click)="generateSimpleQR()">
+        <i class="fa fa-qrcode"></i>
+        Simple QR Code
+      </button>
+      <button class="qr-option-btn" (click)="generateQRWithImage()">
+        <i class="fa fa-image"></i>
+        QR Code with Logo
+      </button>
+    </div>
+    <button class="close-button" (click)="closeQROptionsModal()">Cancel</button>
+  </div>
+</div>
+
+<div class="modal" *ngIf="showQRModal" (click)="closeQRModal()">
+  <div class="modal-content qr-modal" (click)="$event.stopPropagation()">
+    <h2>Product QR Code</h2>
+    <div class="qr-container">
+      <img [src]="qrCodeImage" alt="QR Code" class="qr-image" />
+    </div>
+    <p>Scan this QR code to open this product page</p>
+    <button class="close-button" (click)="closeQRModal()">Close</button>
+  </div>
+</div>

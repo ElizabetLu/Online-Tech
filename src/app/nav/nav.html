@@ -1,0 +1,178 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <a routerLink="" class="logo">
+        <span class="logo-text">Online Tech</span>
+      </a>
+      <a routerLink="/laptops" routerLinkActive="active" class="nav-link desktop-only">Laptops</a>
+      <a routerLink="/phones" routerLinkActive="active" class="nav-link desktop-only">Phones</a>
+    </div>
+
+    <div class="navbar-right">
+      <div class="search-container desktop-only">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="search()"
+          placeholder="SEARCH"
+          class="search-input"
+        />
+      </div>
+
+      <div class="navbar-actions">
+        <button class="action-btn search-icon-btn mobile-only" (click)="toggleMobileSearch()">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <button class="action-btn search-icon-btn desktop-only" (click)="search()">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <a routerLink="/cart" class="action-btn cart-btn">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span *ngIf="cartProducts > 0" class="cart-badge">{{ cartProducts }}</span>
+        </a>
+
+        <a *ngIf="!isLoggedIn" routerLink="/signin" class="action-btn desktop-only">
+          <i class="fa-solid fa-user"></i>
+        </a>
+
+        <div *ngIf="isLoggedIn" class="user-menu desktop-only">
+          <button class="action-btn user-avatar-btn" (click)="toggleUserDropdown()">
+            <img
+              *ngIf="user && user.avatar"
+              [src]="user.avatar"
+              alt="User Avatar"
+              class="user-avatar"
+            />
+            <i *ngIf="!user || !user.avatar" class="fa-solid fa-user"></i>
+          </button>
+          <div *ngIf="userDropdownOpen" class="user-dropdown">
+            <div class="dropdown-header">
+              <img
+                *ngIf="user && user.avatar"
+                [src]="user.avatar"
+                alt="User Avatar"
+                class="dropdown-avatar"
+              />
+              <i *ngIf="!user || !user.avatar" class="fa-solid fa-user dropdown-icon"></i>
+            </div>
+            <a routerLink="/profile" routerLinkActive="active" class="dropdown-item" (click)="closeUserDropdown()">
+              <i class="fa-solid fa-user"></i>
+              <span>View Profile</span>
+            </a>
+            <a routerLink="/orders" routerLinkActive="active" class="dropdown-item" (click)="closeUserDropdown()">
+              <i class="fa-solid fa-box"></i>
+              <span>My Orders</span>
+            </a>
+            <a routerLink="/reviews" routerLinkActive="active" class="dropdown-item" (click)="closeUserDropdown()">
+              <i class="fa-solid fa-star"></i>
+              <span>My Reviews</span>
+            </a>
+            <button class="dropdown-item danger" (click)="deleteAccount()">
+              <i class="fa-solid fa-trash"></i>
+              <span>Delete Account</span>
+            </button>
+            <button class="dropdown-item" (click)="logout()">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+
+        <button
+          class="burger-menu mobile-only"
+          (click)="toggleMobileMenu()"
+          [class.active]="mobileMenuOpen"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-search-bar" [class.active]="mobileSearchOpen">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="search()"
+      placeholder="Search"
+      class="mobile-search-input"
+    />
+    <button class="mobile-search-btn" (click)="search()">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+  </div>
+
+  <div class="mobile-menu" [class.active]="mobileMenuOpen">
+    <div class="mobile-menu-content">
+      <a *ngIf="!isLoggedIn" routerLink="/laptops" routerLinkActive="active" class="mobile-menu-item" (click)="closeMobileMenu()">
+        <i class="fa-solid fa-laptop"></i>
+        <span>Laptops</span>
+      </a>
+      <a *ngIf="!isLoggedIn" routerLink="/phones" routerLinkActive="active" class="mobile-menu-item" (click)="closeMobileMenu()">
+        <i class="fa-solid fa-mobile-screen"></i>
+        <span>Phones</span>
+      </a>
+
+      <div *ngIf="!isLoggedIn" class="mobile-menu-divider"></div>
+
+      <a
+        *ngIf="!isLoggedIn"
+        routerLink="/signin"
+        routerLinkActive="active"
+        class="mobile-menu-item"
+        (click)="closeMobileMenu()"
+      >
+        <i class="fa-solid fa-user"></i>
+        <span>Sign In</span>
+      </a>
+
+      <div *ngIf="isLoggedIn" class="mobile-user-section">
+        <div class="mobile-user-header">
+          <img
+            *ngIf="user && user.avatar"
+            [src]="user.avatar"
+            alt="User Avatar"
+            class="mobile-user-avatar"
+          />
+          <i *ngIf="!user || !user.avatar" class="fa-solid fa-user mobile-user-icon"></i>
+        </div>
+
+        <a routerLink="/laptops" routerLinkActive="active" class="mobile-menu-item" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-laptop"></i>
+          <span>Laptops</span>
+        </a>
+        <a routerLink="/phones" routerLinkActive="active" class="mobile-menu-item" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-mobile-screen"></i>
+          <span>Phones</span>
+        </a>
+        <a routerLink="/profile" routerLinkActive="active" class="mobile-menu-item" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-user"></i>
+          <span>View Profile</span>
+        </a>
+
+        <a routerLink="/orders" routerLinkActive="active" class="mobile-menu-item" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-box"></i>
+          <span>My Orders</span>
+        </a>
+        <a routerLink="/reviews" routerLinkActive="active" class="mobile-menu-item" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-star"></i>
+          <span>My Reviews</span>
+        </a>
+        <button class="mobile-menu-item danger" (click)="deleteAccount()">
+          <i class="fa-solid fa-trash"></i>
+          <span>Delete Account</span>
+        </button>
+        <button class="mobile-menu-item" (click)="logout()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-overlay" [class.active]="mobileMenuOpen" (click)="closeMobileMenu()"></div>
+</nav>

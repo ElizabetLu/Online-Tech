@@ -1,0 +1,333 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+section {
+  padding: 20px;
+  padding-top: 120px;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.6s ease-in-out;
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  section {
+    animation: none;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  h1 {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 600;
+    color: #333;
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+  }
+}
+
+.back {
+  padding: 10px 20px;
+  background: black;
+  color: white;
+  font-weight: 700;
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  &:hover {
+    background: white;
+    color: black;
+    border: 2px solid black;
+    transform: translateX(-3px);
+  }
+}
+
+.orders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #000;
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+    font-weight: 700;
+  }
+  .order-date {
+    color: black;
+    font-size: 14px;
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+    font-weight: 600;
+  }
+}
+
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.order-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 15px;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: white;
+  }
+  .item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    h4 {
+      margin: 0 0 5px 0;
+      font-size: 16px;
+      color: #333;
+      font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+      font-weight: 700;
+    }
+    p {
+      margin: 3px 0;
+      font-size: 14px;
+      color: #666;
+      font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+      font-weight: 600;
+    }
+    .price {
+      color: #000;
+      font-weight: 700;
+    }
+  }
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+  .order-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+      font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+      font-weight: 600;
+      strong {
+        color: #333;
+      }
+    }
+  }
+  .order-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+  }
+}
+
+.empty-orders {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  p {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 20px;
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+    font-weight: 600;
+  }
+  .shop-btn {
+    padding: 12px 30px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+    &:hover {
+      background: white;
+      color: black;
+      border: 2px solid black;
+    }
+  }
+}
+
+.scroll-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: black;
+  border: 2px solid black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: white;
+    border: 2px solid black;
+    transform: scale(1.1);
+
+    .arrow-icon {
+      color: black;
+    }
+  }
+
+  .arrow-icon {
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+
+    i {
+      transition: transform 0.3s ease;
+    }
+  }
+
+  &.scroll-up {
+    .arrow-icon i {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+@media (max-width: 1400px) {
+  section {
+    max-width: 1180px;
+  }
+}
+
+@media (max-width: 1200px) {
+  section {
+    max-width: 1160px;
+  }
+}
+
+@media (max-width: 1024px) {
+  section {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 992px) {
+  .order-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 15px;
+    padding-top: 100px;
+  }
+  .header h1 {
+    font-size: 28px;
+  }
+  .order-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .scroll-btn {
+    width: 45px;
+    height: 45px;
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 569px) {
+  .order-card {
+    padding: 15px;
+  }
+  .order-item {
+    grid-template-columns: 1fr;
+    img {
+      width: 100%;
+      height: 120px;
+    }
+  }
+  .scroll-btn {
+    width: 40px;
+    height: 40px;
+    bottom: 15px;
+    right: 15px;
+
+    .arrow-icon {
+      font-size: 18px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding: 10px;
+    padding-top: 85px;
+  }
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .scroll-btn {
+    width: 38px;
+    height: 38px;
+
+    .arrow-icon {
+      font-size: 16px;
+    }
+  }
+}

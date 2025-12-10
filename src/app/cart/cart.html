@@ -1,0 +1,89 @@
+<section>
+  <div class="header-with-title">
+    <button class="back" (click)="back()">← Back</button>
+    <h1>Shopping Cart</h1>
+  </div>
+
+  <div class="cart-content" *ngIf="cart && cart.products && cart.products.length > 0">
+    <div class="cards-container">
+      <ng-container *ngFor="let item of cart.products">
+        <div class="card" *ngIf="item && item.product">
+          <img [src]="item.product.thumbnail" class="card-img-top" [alt]="item.product.title" (click)="viewProductDetails(item.product)" />
+          <div class="card-body">
+            <h5 class="card-title" (click)="viewProductDetails(item.product)">{{ capitalizeTitle(item.product.title) }}</h5>
+            
+            <div class="price-section">
+              <div class="price-container">
+                <h5 class="card-price">{{ item.product.price.current }} {{ item.product.price.currency }}</h5>
+                <h5 *ngIf="item.product.price.discountPercentage > 0" class="before-price">
+                  {{ item.product.price.beforeDiscount }} {{ item.product.price.currency }}
+                </h5>
+              </div>
+            </div>
+
+            <div class="product-info-grid">
+              <div class="info-item">
+                <i class="fa fa-box"></i>
+                <span>Stock: <strong>{{ item.product.stock }}</strong></span>
+              </div>
+              <div class="info-item">
+                <i class="fa fa-star"></i>
+                <span>Rating: <strong>{{ item.product.rating | number : '1.1-1' }}</strong></span>
+              </div>
+              <div class="info-item">
+                <i class="fa fa-comment"></i>
+                <span>Reviews: <strong>{{ getReviewsCount(item.product._id) }}</strong></span>
+              </div>
+              <div class="info-item">
+                <i class="fa fa-shopping-bag"></i>
+                <span>Quantity: <strong>{{ item.quantity }}</strong></span>
+              </div>
+            </div>
+
+            <div class="total-price-section">
+              <span class="total-label">Total:</span>
+              <span class="total-value">{{ item.product.price.current * item.quantity | number : '1.0-2' }} {{ item.product.price.currency }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="action-btn increase-btn" (click)="increaseQuantity($event, item)">+</button>
+            <button
+              class="action-btn decrease-btn"
+              (click)="decreaseQuantity($event, item)"
+              [disabled]="item.quantity <= 1"
+            >
+              -
+            </button>
+            <button class="action-btn delete-btn" (click)="removeItem($event, item)">Delete</button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="cart-summary">
+      <div class="summary-content">
+        <div class="total-section">
+          <span class="total-label">Cart Total:</span>
+          <span class="total-amount">{{ getCartTotal() | number : '1.0-2' }} {{ getCartCurrency() }}</span>
+        </div>
+        <div class="action-buttons">
+          <button class="clear-btn" (click)="clearCart()">Clear Cart</button>
+          <button class="checkout-btn" (click)="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-cart" *ngIf="!cart || !cart.products || cart.products.length === 0">
+    <i class="fa fa-shopping-cart"></i>
+    <p>Your cart is empty</p>
+    <button class="continue-shopping" (click)="back()">Continue Shopping</button>
+  </div>
+
+  <button class="scroll-btn" (click)="handleScroll()" [class.scroll-up]="!isScrollingDown">
+    <span class="arrow-icon">
+      <i [class]="isScrollingDown ? 'fa fa-chevron-down' : 'fa fa-chevron-up'"></i>
+    </span>
+  </button>
+</section>

@@ -1,0 +1,81 @@
+<section>
+  <div class="header">
+    <button class="back" (click)="back()">← Back</button>
+    <h1>My Orders</h1>
+  </div>
+
+  <div class="orders-container" *ngIf="orders && orders.length > 0">
+    <div *ngFor="let order of orders" class="order-card">
+      <div class="order-header" (click)="viewOrderDetails(order)" style="cursor: pointer;">
+        <h3>Order #{{ order._id.slice(-8) }}</h3>
+        <span class="order-date">{{ order.createdAt | date: 'short' }}</span>
+      </div>
+      <div class="order-items">
+        <div *ngFor="let item of order.items" class="order-item" (click)="viewProductDetails(item.product)" style="cursor: pointer;">
+          <img [src]="item.product.thumbnail" [alt]="item.product.title" />
+          <div class="item-info">
+            <h4>{{ capitalizeTitle(item.product.title) }}</h4>
+            <p>Quantity: {{ item.quantity }}</p>
+            <p class="price">{{ item.product.price.current }} {{ item.product.price.currency }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="order-footer" (click)="viewOrderDetails(order)" style="cursor: pointer;">
+        <div class="order-details">
+          <p><strong>Payment:</strong> {{ order.paymentMethod }}</p>
+          <p><strong>Shipping:</strong> {{ order.shippingMethod }}</p>
+        </div>
+        <span class="order-total">Total: {{ order.total | number: '1.2-2' }} {{ order.currency || 'USD' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-orders" *ngIf="!orders || orders.length === 0">
+    <p>You have no orders yet</p>
+    <button routerLink="/" class="shop-btn">Start Shopping</button>
+  </div>
+
+  <button class="scroll-btn" (click)="handleScroll()" [class.scroll-up]="!isScrollingDown">
+  <span class="arrow-icon">
+    <i [class]="isScrollingDown ? 'fa fa-chevron-down' : 'fa fa-chevron-up'"></i>
+  </span>
+</button>
+</section>
+
+<div class="modal" *ngIf="selectedOrder" (click)="closeOrderDetails()">
+  <div class="modal-content order-details-modal" (click)="$event.stopPropagation()">
+    <h2>Order Details - #{{ selectedOrder._id.slice(-8) }}</h2>
+    <div class="order-info">
+      <p><strong>Order Date:</strong> {{ selectedOrder.createdAt | date: 'full' }}</p>
+      <p><strong>Payment Method:</strong> {{ selectedOrder.paymentMethod }}</p>
+      <p><strong>Shipping Method:</strong> {{ selectedOrder.shippingMethod }}</p>
+    </div>
+    <div class="order-products">
+      <h3>Products</h3>
+      <div *ngFor="let item of selectedOrder.items" class="product-detail-item" (click)="viewProductDetailsFromModal(item.product)" style="cursor: pointer;">
+        <img [src]="item.product.thumbnail" [alt]="item.product.title" />
+        <div class="product-detail-info">
+          <h4>{{ capitalizeTitle(item.product.title) }}</h4>
+          <p>Quantity: {{ item.quantity }}</p>
+          <p>Unit Price: {{ item.product.price.current }} {{ item.product.price.currency }}</p>
+          <p><strong>Total: {{ item.product.price.current * item.quantity | number: '1.2-2' }} {{ item.product.price.currency }}</strong></p>
+        </div>
+      </div>
+    </div>
+    <div class="order-totals">
+      <div class="total-row">
+        <span>Subtotal:</span>
+        <span>{{ selectedOrder.subtotal | number: '1.2-2' }} {{ selectedOrder.currency }}</span>
+      </div>
+      <div class="total-row">
+        <span>Shipping:</span>
+        <span>{{ selectedOrder.shipping | number: '1.2-2' }} GEL</span>
+      </div>
+      <div class="total-row grand-total">
+        <span>Total:</span>
+        <span>{{ selectedOrder.total | number: '1.2-2' }} {{ selectedOrder.currency }}</span>
+      </div>
+    </div>
+    <button class="close-button" (click)="closeOrderDetails()">Close</button>
+  </div>
+</div>

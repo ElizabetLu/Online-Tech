@@ -1,0 +1,810 @@
+@keyframes fadeIn { 
+  from { 
+    opacity: 0; 
+  } 
+  to { 
+    opacity: 1; 
+  } 
+}
+
+@keyframes slideDown { 
+  from { 
+    opacity: 0; 
+    transform: translateY(-20px); 
+  } 
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  } 
+}
+
+@keyframes slideUp { 
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  } 
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  } 
+}
+
+.product-detail { 
+  padding: 20px; 
+  max-width: 1400px; 
+  margin: 0 auto; 
+  animation: fadeIn 0.6s ease-in-out; 
+  background-color: white; 
+}
+
+@media (prefers-reduced-motion: reduce) { 
+  .product-detail, 
+  .header, 
+  .product-container, 
+  .tabs { 
+    animation: none; 
+  } 
+}
+
+.header { 
+  margin-bottom: 20px; 
+  animation: slideDown 0.6s ease-out; 
+}
+
+.back { 
+  padding: 10px 20px; 
+  background: black; 
+  color: white; 
+  font-weight: 700; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+  border: none; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  font-size: 16px; 
+  transition: all 0.3s ease; 
+  &:hover { 
+    background: white; 
+    color: black; 
+    border: 2px solid black; 
+    transform: translateX(-3px); 
+  } 
+}
+
+.product-container { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 40px; 
+  margin-bottom: 40px; 
+  animation: slideUp 0.7s ease-out; 
+}
+
+.product-left { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 20px; 
+}
+
+.product-main-image { 
+  width: 100%; 
+  height: 500px; 
+  background: white; 
+  border-radius: 12px; 
+  overflow: hidden; 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+  .main-image { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: contain; 
+    padding: 40px; 
+    transition: transform 0.3s ease; 
+    &:hover { 
+      transform: scale(1.05); 
+    } 
+  } 
+}
+
+.thumbnail-images { 
+  display: flex; 
+  gap: 15px; 
+  overflow-x: auto; 
+  margin-top: 30px; 
+  margin-bottom: 30px; 
+  img { 
+    width: 100px; 
+    height: 100px; 
+    object-fit: contain; 
+    background: white; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    flex-shrink: 0; 
+    &:hover { 
+      border: 2px solid black; 
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
+    } 
+    &.active { 
+      border: 2px solid black; 
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
+    } 
+  } 
+}
+
+.product-right { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 20px; 
+}
+
+.product-title { 
+  font-size: 32px; 
+  font-weight: 700; 
+  color: black; 
+  margin: 0; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+}
+
+.description { 
+  font-size: 16px; 
+  color: black; 
+  font-weight: 700; 
+  line-height: 1.6; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+}
+
+.product-specs { 
+  border: 2px solid black; 
+  background: white; 
+  border-radius: 8px; 
+  padding: 5px 60px; 
+}
+
+.spec-row { 
+  display: flex; 
+  justify-content: space-between; 
+  padding: 12px 0; 
+  &:last-child { 
+    border-bottom: none; 
+  } 
+}
+
+.spec-label { 
+  font-weight: 700; 
+  color: black; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+}
+
+.spec-value { 
+  color: black; 
+  font-weight: 700; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+  &.out-of-stock { 
+    color: red; 
+    font-weight: 700; 
+  } 
+}
+
+.product-price { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+}
+
+.price { 
+  font-size: 36px; 
+  font-weight: 700; 
+  color: black; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+}
+
+.before-price { 
+  font-size: 24px; 
+  text-decoration: line-through; 
+  color: red; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+  font-weight: 700; 
+}
+
+.discount-badge { 
+  background-color: red; 
+  color: white; 
+  font-weight: 700; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+  padding: 5px 10px; 
+  border-radius: 4px; 
+  font-size: 14px; 
+}
+
+.action-buttons { 
+  display: flex; 
+  gap: 15px; 
+}
+
+.buy-button, 
+.action-btn { 
+  flex: 1; 
+  padding: 15px 30px; 
+  border: none; 
+  border-radius: 6px; 
+  font-size: 16px; 
+  font-weight: 700; 
+  cursor: pointer; 
+  transition: all 0.3s ease; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+}
+
+.buy-button { 
+  background: black; 
+  color: white; 
+  &:hover:not(:disabled) { 
+    background: white; 
+    color: black; 
+    border: 2px solid black; 
+    transform: translateY(-2px); 
+  } 
+  &:disabled { 
+    background: #d3d3d3; 
+    color: #7a7a7a; 
+    border: none; 
+    cursor: not-allowed; 
+    transform: none; 
+  } 
+}
+
+.action-btn { 
+  background: black; 
+  color: white; 
+  &:hover { 
+    background: white; 
+    border: 2px solid black; 
+    color: black; 
+    transform: translateY(-2px); 
+  } 
+}
+
+.qr-btn { 
+  background: black; 
+  color: white; 
+  &:hover { 
+    background: white; 
+    color: black; 
+    border: 2px solid black; 
+  } 
+}
+
+.tabs { 
+  margin-top: 40px; 
+  animation: slideUp 0.8s ease-out; 
+}
+
+.tab-headers { 
+  display: flex; 
+  gap: 10px; 
+  margin-bottom: 20px; 
+  button { 
+    padding: 12px 24px; 
+    background: white; 
+    border: 2px solid black; 
+    font-size: 16px; 
+    font-weight: 700; 
+    color: black; 
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+    cursor: pointer; 
+    border-radius: 6px 6px 0 0; 
+    transition: all 0.3s ease; 
+    &.active { 
+      background: black; 
+      color: white; 
+    } 
+    &:hover { 
+      transform: translateY(-2px); 
+    } 
+  } 
+}
+
+.tab-content { 
+  padding: 20px; 
+  background: white; 
+  border-radius: 8px; 
+  border: 2px solid black; 
+}
+
+.tab-panel { 
+  h3 { 
+    font-size: 24px; 
+    margin-bottom: 15px; 
+    color: black; 
+    font-weight: 700; 
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+  } 
+  p { 
+    font-size: 16px; 
+    color: black; 
+    font-weight: 700; 
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+    margin-bottom: 10px; 
+  } 
+  ul { 
+    list-style: none; 
+    padding: 0; 
+    li { 
+      padding: 8px 0; 
+      font-size: 16px; 
+      color: black; 
+      font-weight: 700; 
+      font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+      &:last-child { 
+        border-bottom: none; 
+      } 
+    } 
+  } 
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review-item {
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-reviews {
+  text-align: center;
+  padding: 40px 20px;
+  
+  p {
+    font-size: 18px;
+    color: #666;
+    font-weight: 600;
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+  }
+}
+
+.review-header-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.reviewer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reviewer-name {
+  font-weight: 700;
+  font-size: 18px;
+  color: black;
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+}
+
+.stars {
+  display: flex;
+  gap: 4px;
+  
+  .star {
+    font-size: 18px;
+    color: #ddd;
+    
+    &.filled {
+      color: black;
+    }
+  }
+}
+
+.review-date {
+  font-size: 14px;
+  color: #666;
+  font-weight: 600;
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+}
+
+.review-text {
+  font-size: 16px;
+  color: black;
+  font-weight: 600;
+  line-height: 1.6;
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+  margin-bottom: 15px;
+}
+
+.modal { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: rgba(0, 0, 0, 0.7); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 2000; 
+  animation: fadeIn 0.3s ease-in-out; 
+}
+
+.modal-content { 
+  background: white; 
+  padding: 30px; 
+  border-radius: 12px; 
+  width: 90%; 
+  max-width: 500px; 
+  border: 2px solid black; 
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); 
+  animation: slideUp 0.4s ease-out; 
+  h2 { 
+    margin: 0 0 20px 0; 
+    font-size: 24px; 
+    color: black; 
+    font-weight: 700; 
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+  } 
+  p { 
+    font-size: 16px; 
+    color: black; 
+    font-weight: 700; 
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+    margin: 15px 0; 
+  } 
+}
+
+.qr-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.qr-options-modal {
+  max-width: 500px;
+}
+
+.qr-option-btn {
+  padding: 20px 30px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  i {
+    font-size: 20px;
+  }
+
+  &:hover {
+    background: white;
+    color: black;
+    border: 2px solid black;
+    transform: translateY(-2px);
+  }
+}
+
+.qr-container { 
+  display: flex; 
+  justify-content: center; 
+  padding: 20px; 
+  background: white; 
+  border-radius: 8px; 
+  border: 2px solid black; 
+  margin: 20px 0; 
+}
+
+.qr-image { 
+  max-width: 300px; 
+  width: 100%; 
+  height: auto; 
+}
+
+.qr-modal {
+  max-width: 600px;
+}
+
+.rating-form, 
+.add-review-form, 
+.review-form { 
+  .form-group { 
+    margin-bottom: 1.5rem; 
+    label { 
+      display: block; 
+      margin-bottom: 0.5rem; 
+      font-weight: 600; 
+      font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+      color: black; 
+      font-size: 1rem; 
+    } 
+    input, 
+    textarea, 
+    select { 
+      width: 100%; 
+      padding: 0.75rem; 
+      border: 2px solid #ddd; 
+      border-radius: 8px; 
+      font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+      font-weight: 600; 
+      font-size: 1rem; 
+      &:focus { 
+        outline: none; 
+        border-color: black; 
+      } 
+    } 
+    .readonly-input { 
+      background: #f5f5f5; 
+      cursor: not-allowed; 
+    } 
+    textarea { 
+      resize: vertical; 
+    } 
+  } 
+  .star-rating { 
+    display: flex; 
+    gap: 0.5rem; 
+    padding: 0.5rem 0; 
+    .star { 
+      font-size: 2rem; 
+      color: #ddd; 
+      cursor: pointer; 
+      transition: color 0.2s; 
+      &.filled { 
+        color: black; 
+      } 
+      &:hover { 
+        color: black; 
+      } 
+    } 
+  } 
+}
+
+.modal-actions { 
+  display: flex; 
+  gap: 1rem; 
+  margin-top: 1.5rem; 
+  .btn { 
+    padding: 0.75rem 1.5rem; 
+    border: none; 
+    border-radius: 8px; 
+    font-weight: 600; 
+    cursor: pointer; 
+    font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+    transition: all 0.3s; 
+    font-size: 1rem; 
+    &.btn-primary, 
+    &.btn-secondary { 
+      background: black; 
+      color: white; 
+      &:hover { 
+        color: black; 
+        border: 2px solid black; 
+        background: white; 
+        transform: translateY(-2px); 
+      } 
+    } 
+  } 
+}
+
+.review-actions { 
+  display: flex; 
+  gap: 1rem; 
+  margin-top: 1rem; 
+}
+
+.edit-review-btn, 
+.delete-review-btn { 
+  padding: 0.7rem 1.6rem; 
+  border: none; 
+  border-radius: 6px; 
+  background: black; 
+  color: white; 
+  font-weight: 700; 
+  cursor: pointer; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+  transition: all 0.3s ease; 
+  font-size: 1rem; 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  i { 
+    font-size: 1rem; 
+  } 
+  &:hover { 
+    background: white; 
+    color: black; 
+    border: 2px solid black; 
+    transform: translateY(-2px); 
+  } 
+}
+
+@media (max-width: 1400px) { 
+  .product-detail { 
+    max-width: 1200px; 
+  } 
+}
+
+@media (max-width: 1200px) { 
+  .product-detail { 
+    max-width: 1000px; 
+  } 
+  .product-main-image { 
+    height: 450px; 
+  } 
+}
+
+@media (max-width: 1024px) { 
+  .product-container { 
+    grid-template-columns: 1fr; 
+    gap: 30px; 
+  } 
+  .product-main-image { 
+    height: 400px; 
+  } 
+}
+
+@media (max-width: 992px) { 
+  .product-detail { 
+    padding-top: 110px; 
+  } 
+  .product-title { 
+    font-size: 28px; 
+  } 
+  .price { 
+    font-size: 32px; 
+  } 
+}
+
+@media (max-width: 768px) { 
+  .product-detail { 
+    padding: 15px; 
+    padding-top: 100px; 
+  } 
+  .product-main-image { 
+    height: 350px; 
+  } 
+  .product-title { 
+    font-size: 24px; 
+  } 
+  .price { 
+    font-size: 28px; 
+  } 
+  .action-buttons { 
+    flex-direction: column; 
+  } 
+  .thumbnail-images img { 
+    width: 80px; 
+    height: 80px; 
+  } 
+  .review-actions { 
+    flex-direction: column; 
+  }
+  
+  .review-header-item {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .qr-options {
+    gap: 10px;
+  }
+
+  .qr-option-btn {
+    padding: 15px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 569px) { 
+  .product-detail { 
+    padding: 12px; 
+    padding-top: 90px; 
+  } 
+  .product-main-image { 
+    height: 300px; 
+  } 
+  .product-title { 
+    font-size: 22px; 
+  } 
+  .description { 
+    font-size: 14px; 
+  } 
+  .price { 
+    font-size: 24px; 
+  } 
+  .before-price { 
+    font-size: 18px; 
+  } 
+  .buy-button, 
+  .action-btn { 
+    padding: 12px 20px; 
+    font-size: 14px; 
+  } 
+  .thumbnail-images img { 
+    width: 70px; 
+    height: 70px; 
+  } 
+}
+
+@media (max-width: 480px) { 
+  .product-detail { 
+    padding: 10px; 
+    padding-top: 85px; 
+  } 
+  .product-main-image { 
+    height: 250px; 
+  } 
+  .product-title { 
+    font-size: 20px; 
+  } 
+  .price { 
+    font-size: 22px; 
+  } 
+  .product-specs { 
+    padding: 15px; 
+  } 
+  .spec-row { 
+    flex-direction: column; 
+    gap: 5px; 
+  } 
+  .buy-button, 
+  .action-btn { 
+    padding: 10px 16px; 
+    font-size: 13px; 
+  } 
+  .thumbnail-images img { 
+    width: 60px; 
+    height: 60px; 
+  } 
+  .tab-headers button { 
+    padding: 10px 16px; 
+    font-size: 14px; 
+  } 
+  .modal-content { 
+    padding: 20px; 
+    h2 { 
+      font-size: 20px; 
+    } 
+  } 
+  .star-rating .star { 
+    font-size: 28px; 
+  }
+
+  .qr-option-btn {
+    padding: 12px 15px;
+    font-size: 13px;
+
+    i {
+      font-size: 16px;
+    }
+  }
+}
+
+.close-button { 
+  padding: 0.75rem 1.5rem; 
+  border: none; 
+  border-radius: 8px; 
+  font-weight: 600; 
+  cursor: pointer; 
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Times New Roman', serif; 
+  transition: all 0.3s; 
+  font-size: 1rem; 
+  background: black; 
+  color: white; 
+  margin-top: 1rem; 
+  width: 100%;
+  &:hover { 
+    color: black; 
+    border: 2px solid black; 
+    background: white; 
+    transform: translateY(-2px); 
+  } 
+}
